@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mental Health Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="MitrAlap Logo" class="chatbot-logo" />
+        <h1>MitrAlap</h1>
+        <p class="tagline">Start The Adda, End The Stress</p>
+    </header>
+
+    <div id="chat-container" style="padding: 10px; max-width: 600px; margin: auto;">
+        <div id="chat-box" style="height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background: white;">
+            <!-- Chat messages will appear here -->
+        </div>
+
+        <form id="chat-form" style="margin-top: 10px;">
+            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required style="width: 80%; padding: 10px;" />
+            <button type="submit" style="padding: 10px;">Send</button>
+        </form>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const chatForm = document.getElementById("chat-form");
+        const userInput = document.getElementById("user-input");
+
+        // Append a message to chat box
+        function appendMessage(sender, text) {
+            const msgDiv = document.createElement("div");
+            msgDiv.style.margin = "8px 0";
+            msgDiv.style.padding = "8px";
+            msgDiv.style.borderRadius = "5px";
+            msgDiv.style.maxWidth = "80%";
+            if (sender === "user") {
+                msgDiv.style.backgroundColor = "#DCF8C6";
+                msgDiv.style.alignSelf = "flex-end";
+                msgDiv.style.marginLeft = "auto";
+            } else {
+                msgDiv.style.backgroundColor = "#eee";
+                msgDiv.style.alignSelf = "flex-start";
+                msgDiv.style.marginRight = "auto";
+            }
+            msgDiv.textContent = text;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        chatForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Show user message
+            appendMessage("user", message);
+            userInput.value = "";
+
+            // Send message to Flask backend
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message }),
+                });
+                const data = await response.json();
+                // Show bot responses
+                data.responses.forEach((resp) => appendMessage("bot", resp));
+            } catch (error) {
+                appendMessage("bot", "Sorry, there was an error connecting to the server.");
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
