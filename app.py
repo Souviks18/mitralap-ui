@@ -11,7 +11,6 @@ def home():
 def chat():
     user_message = request.json.get("message")
     rasa_url = "https://mitralap-bot.onrender.com/webhooks/rest/webhook"
-
     payload = {"message": user_message}
     response = requests.post(rasa_url, json=payload)
 
