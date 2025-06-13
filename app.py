@@ -10,7 +10,8 @@ def home():
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json.get("message")
-    rasa_url = "https://mitralap-bot.onrender.com/webhooks/rest/webhook"
+    rasa_url = "https://mitralap-bot-1.onrender.com/webhooks/rest/webhook"
+
     payload = {"message": user_message}
     response = requests.post(rasa_url, json=payload)
 
