@@ -1,7 +1,3 @@
-rasa==3.5.17
-tensorflow==2.11.1
-transformers==4.28.1
-joblib
 flask
 requests
 gunicorn
