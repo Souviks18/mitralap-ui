@@ -3,6 +3,7 @@ import requests
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -10,7 +11,8 @@ def home():
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json.get("message")
-    rasa_url = "https://mitralap-bot-1.onrender.com/webhooks/rest/webhook"
+    rasa_url = "https://mitralap-bot.onrender.com/webhooks/rest/webhook"
+
 
     payload = {"message": user_message}
     response = requests.post(rasa_url, json=payload)
@@ -23,4 +25,5 @@ def chat():
     return jsonify({"responses": messages})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
