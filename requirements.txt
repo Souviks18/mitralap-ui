@@ -1,0 +1,4 @@
+rasa==3.5.17
+flask
+requests
+gunicorn
